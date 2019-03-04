@@ -231,6 +231,8 @@ class MasterLocustRunner(DistributedLocustRunner):
     def __init__(self, *args, **kwargs):
         super(MasterLocustRunner, self).__init__(*args, **kwargs)
 
+        f = open("report_for_master.txt", "w+")
+
         class SlaveNodesDict(dict):
             def get_by_state(self, state):
                 return [c for c in six.itervalues(self) if c.state == state]
@@ -264,7 +266,8 @@ class MasterLocustRunner(DistributedLocustRunner):
                 return
 
             self.clients[client_id].user_count = data["user_count"]
-        events.slave_report += on_slave_report
+        # events.slave_report += on_slave_report
+        f.write(str(on_slave_report()))
         
         # register listener that sends quit message to slave nodes
         def on_quitting():
